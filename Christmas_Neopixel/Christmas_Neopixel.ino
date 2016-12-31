@@ -40,7 +40,7 @@ int delayval = 500; // delay for half a second
 
 long pixelMatrix[NUMPIXELS];
 
-long image [] = {
+long arbol [] = {
   0, 0, 0, a, a, 0, 0, 0,
   0, 0, 0, a, a, 0, 0, 0,
   0, 0, a, a, a, a, 0, 0,
@@ -51,7 +51,20 @@ long image [] = {
   0, 0, 0, a, a, 0, 0, 0
 };
 
-int random_pins[] = {3, 4, 18, 21, 33, 38};
+long image [] = {
+  0, 0, a, a, a, a, 0, 0,
+  0, a, 0, 0, 0, 0, a, 0,
+  a, 0, 0, 0, 0, 0, 0, a,
+  a, 0, 0, 0, 0, 0, 0, a,
+  a, 0, 0, 0, 0, 0, 0, a,
+  a, 0, 0, 0, 0, 0, 0, a,
+  0, a, 0, 0, 0, 0, a, 0,
+  0, 0, a, a, a, a, 0, 0
+};
+
+int random_pins_arbol[] = {3, 4, 18, 21, 33, 38};
+
+int random_pins[][8] = {{18, 21, 43, 44, 34, 37}, {18, 21, 43, 44, 42, 45}, {18, 21, 43, 44, 50, 53}};
 
 int led =  LED_BUILTIN;
 
@@ -113,6 +126,7 @@ void setup() {
     pixels.setPixelColor(i, image[i]);
   }
 
+  pixels.setBrightness(25);
   pixels.show();
 }
 
@@ -201,9 +215,27 @@ void loop() {
 
   //pixels.setPixelColor(i, pixelMatrix[i]);
 
-  for (int i = 0; i < sizeof(random_pins) / 4; i++) { //Initialize all pixels to 0 swith off
-    pixels.setPixelColor(random_pins[i], random(0, 16777215));
+  //random arbol
+  //for (int i = 0; i < sizeof(random_pins) / 4; i++) {
+  //  pixels.setPixelColor(random_pins[i], random(0, 16777215));
+  //}
+
+  static int i = 0;
+
+  for (int i = 0; i < NUMPIXELS; i++) { //Initialize all pixels to 0 swith off
+    pixels.setPixelColor(i, image[i]);
   }
+
+  for (int j = 0; j < 6; j++) {
+    pixels.setPixelColor(random_pins[i][j], pixels.Color(0, 0, 50));
+    Serial.print(i);
+    Serial.print("-");
+    Serial.print(j);
+    Serial.print("-->");
+    Serial.println(random_pins[i][j]);
+  }
+
+  (i < 2) ? i++ : i = 0;
 
   pixels.setBrightness(25);
   pixels.show();
